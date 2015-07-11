@@ -4,6 +4,11 @@
   },
   "rules": {
     "semi": [2, "never"],
-    "curly": 0
-  }
+    "curly": 0,
+    "strict": 0
+  },
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true
+  },
 }
