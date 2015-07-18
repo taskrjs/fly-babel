@@ -25,5 +25,10 @@
   "engines": {
     "iojs": ">= 1.0.0",
     "node": ">= 0.11.0"
+  },
+  "keywords": {
+    "fly",
+    "fly-plugin",
+    "babel"
   }
 }
