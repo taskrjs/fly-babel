@@ -1,6 +1,7 @@
-module.exports = function () {
-  return this.filter("babel", (src, opts) => {
-    try { return require("babel").transform(src, opts).code }
+import { transform } from "babel"
+export default function () {
+  return this.filter("babel", (source, options) => {
+    try { return transform(source, options).code }
     catch (e) { throw e }
   }, { ext: ".js" })
 }
