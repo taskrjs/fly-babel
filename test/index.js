@@ -1,6 +1,5 @@
 const test = require("tape").test
-const bind = require("fly-util").bind
-const babel = require(bind("../"))
+const babel = require("../")
 
 test("fly-babel", (t) => {
   t.plan(3)
