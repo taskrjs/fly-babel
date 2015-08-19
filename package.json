@@ -16,7 +16,9 @@
   },
   "author": "Jorge Bucaran",
   "dependencies": {
-    "babel-core": "*"
+    "object-assign": "^3.0.0",
+    "babel-core": "*",
+    "source-map": "^0.4.4"
   },
   "devDependencies": {
     "eslint": "^0.21.2",
