@@ -28,7 +28,7 @@ export function* text () {
   yield this
     .source("src/**/*.js")
     .babel({
-      presets: ['es2015'],
+      presets: ["es2015"],
       sourceMaps: true
     })
     .target("dist/")
