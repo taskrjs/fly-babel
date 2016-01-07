@@ -27,7 +27,10 @@ npm install -D fly-babel
 export function* text () {
   yield this
     .source("src/**/*.js")
-    .babel({ stage: 0 })
+    .babel({
+      presets: ['es2015'],
+			sourceMaps: true
+    })
     .target("dist/")
 }
 ```
