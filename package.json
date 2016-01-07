@@ -16,7 +16,8 @@
   },
   "author": "Jorge Bucaran",
   "dependencies": {
-    "babel-core": "^5.8.29",
+    "babel-core": "^6.3.0",
+    "babel-preset-es2015": "^6.3.0",
     "object-assign": "^3.0.0",
     "source-map": "^0.4.4"
   },
