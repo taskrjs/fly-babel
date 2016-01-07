@@ -1,6 +1,6 @@
 {
   "name": "fly-babel",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Babel plugin for Fly",
   "license": "MIT",
   "repository": "https://github.com/bucaran/fly-babel",
@@ -16,8 +16,8 @@
   },
   "author": "Jorge Bucaran",
   "dependencies": {
+    "babel-core": "^5.8.29",
     "object-assign": "^3.0.0",
-    "babel-core": "*",
     "source-map": "^0.4.4"
   },
   "devDependencies": {
