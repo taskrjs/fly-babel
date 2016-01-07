@@ -29,7 +29,7 @@ export function* text () {
     .source("src/**/*.js")
     .babel({
       presets: ['es2015'],
-			sourceMaps: true
+      sourceMaps: true
     })
     .target("dist/")
 }
