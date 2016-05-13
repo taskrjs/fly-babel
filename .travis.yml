@@ -5,3 +5,7 @@ node_js:
   - '4'
   - '0.12'
   - 'iojs'
+
+branches:
+  only:
+    - master
