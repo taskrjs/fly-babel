@@ -1,7 +1,7 @@
-const test = require("tape").test
-const babel = require("../")
+var test = require("tape").test
+var babel = require("../")
 
-test("fly-babel", (t) => {
+test("fly-babel", function (t) {
   t.plan(5)
   babel.call({
     filter: function (name, transform) {
