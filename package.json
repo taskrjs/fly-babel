@@ -12,7 +12,7 @@
     "test": "npm run lint && npm run test-harmony",
     "build": "echo No build task specified.",
     "deploy": "npm run test && git push origin master && npm publish",
-    "test-harmony": "node --harmony --harmony_arrow_functions ./node_modules/tape/bin/tape test/*.js"
+    "test-harmony": "node --harmony ./node_modules/tape/bin/tape test/*.js"
   },
   "author": "Jorge Bucaran",
   "dependencies": {
