@@ -1,6 +1,6 @@
 {
   "name": "fly-babel",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Babel plugin for Fly",
   "license": "MIT",
   "repository": "https://github.com/bucaran/fly-babel",
