@@ -6,8 +6,8 @@ test("fly-babel", (t) => {
   babel.call({
     filter: function (name, transform) {
       const content = "let a = 0"
-      const result = transform(content, {presets: ["es2015"]})
-      const map = transform(content, {sourceMaps: true}).map
+      const result = transform(content, {file: {}, presets: ["es2015"]})
+      const map = transform(content, {file: {}, sourceMaps: true}).map
 
       t.equal(name, "babel", "add babel filter")
       t.ok(/var a/.test(result.code), "babel transform")
