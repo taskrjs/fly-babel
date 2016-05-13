@@ -14,7 +14,18 @@
     "deploy": "npm run test && git push origin master && npm publish",
     "test-harmony": "node --harmony `which tape` test/*.js | `which tspec`"
   },
-  "author": "Jorge Bucaran",
+  "author": {
+    "name": "Jorge Bucaran",
+    "email": "j@bucaran.me",
+    "url": "https://github.com/bucaran"
+  },
+  "contributors": [
+    {
+      "name": "Luke Edwards",
+      "email": "luke@lukeed.com",
+      "url": "https://lukeed.com"
+    }
+  ],
   "dependencies": {
     "babel-core": "^6.3.0",
     "babel-preset-es2015": "^6.3.0",
