@@ -19,6 +19,7 @@
     "babel-core": "^6.3.0",
     "babel-preset-es2015": "^6.3.0",
     "object-assign": "^3.0.0",
+    "read-pkg-up": "^1.0.1",
     "source-map": "^0.4.4"
   },
   "devDependencies": {
