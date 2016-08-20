@@ -1,7 +1,7 @@
 const babel = require("babel-core").transform
 const assign = require("object-assign")
 const readPkg = require("read-pkg-up")
-const BABEL_REGEX = /(^babel-preset)-(.*)/ig
+const BABEL_REGEX = /(^babel-(?:plugin|preset))-(.*)/ig
 
 module.exports = function () {
   var cache
