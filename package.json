@@ -9,6 +9,17 @@
     "test": "xo && node --harmony `which tape` test/*.js | `which tspec`"
   },
   "author": "Jorge Bucaran",
+  "contributors": [
+    {
+      "name": "Luke Edwards",
+      "email": "luke@lukeed.com",
+      "url": "https://lukeed.com"
+    }, {
+      "name": "Oleh Kuchuk",
+      "email": "kuchuklehjs@gmail.com",
+      "url": "https://github.com/hzlmn"
+    }
+  ],
   "dependencies": {
     "babel-core": "^6.3.0",
     "babel-preset-es2015": "^6.3.0",
