@@ -2,7 +2,13 @@ const babel = require('babel-core').transform
 const assign = require('object-assign')
 const readPkg = require('read-pkg-up')
 
-const BABEL_REGEX = /(^babel-(?:plugin|preset))-(.*)/ig
+function matchType(deps, type) {
+  var rgx = new RegExp('(^babel-' + type + ')-(.*)', 'ig')
+  return deps.reduce(function (acc, value) {
+    var matches = rgx.exec(value)
+    return matches ? (acc.concat(matches[2])) : acc
+  }, [])
+}
 
 module.exports = function () {
   var cache
@@ -10,10 +16,9 @@ module.exports = function () {
     if (options.preload) {
       delete options.preload
       var pkg = cache || (cache = readPkg.sync().pkg)
-      options.presets = Object.keys(pkg.devDependencies || {}).reduce(function (acc, value) {
-        var matches = BABEL_REGEX.exec(value)
-        return matches ? (acc.concat(matches[2])) : acc
-      }, [])
+      var deps = Object.keys(pkg.devDependencies || {})
+      options.presets = matchType(deps, 'preset')
+      options.plugins = matchType(deps, 'plugin')
     }
     options.filename = options.file.base
     delete options.file
