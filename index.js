@@ -1,13 +1,13 @@
 const babel = require("babel-core").transform
 const assign = require("object-assign")
 const readPkg = require("read-pkg-up")
-const BABEL_REGEX = /(babel-preset)-([a-z0-9_-]+)/ig;
+const BABEL_REGEX = /(^babel-preset)-(.*)/ig
 
 module.exports = function () {
   var cache
   return this.filter("babel", function (data, options) {
     if (options.preload) {
-      var pkg = cache || readPkg.sync().pkg
+      var pkg = cache || (cache = readPkg.sync().pkg)
       var deps = pkg.devDependencies || {}
       var presets = Object.keys(deps).reduce(function (acc, value) {
         var processed = BABEL_REGEX.exec(value)
