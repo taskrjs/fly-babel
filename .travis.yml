@@ -1,9 +1,6 @@
 language: node_js
 node_js:
-  - '6'
-  - '5'
-  - '4'
-  - '0.12'
-  - 'iojs'
-
-script: 'npm run test-harmony'
+  - 6
+  - 5
+  - 4
+  - 0.12
