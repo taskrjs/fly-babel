@@ -7,19 +7,15 @@ module.exports = function () {
   var cache
   return this.filter("babel", function (data, options) {
     if (options.preload) {
-      var pkg = cache || (cache = readPkg.sync().pkg)
-      var deps = pkg.devDependencies || {}
-      var presets = Object.keys(deps).reduce(function (acc, value) {
-        var processed = BABEL_REGEX.exec(value)
-        if (!processed) return acc
-        acc.push(processed[2])
-        return acc
-      }, [])
-      options.presets = presets
       delete options.preload
+      var pkg = cache || (cache = readPkg.sync().pkg)
+      options.presets = Object.keys(pkg.devDependencies || {}).reduce(function (acc, value) {
+        var matches = BABEL_REGEX.exec(value)
+        return matches ? (acc.concat(matches[2])) : acc
+      }, [])
     }
     options.filename = options.file.base
     delete options.file
-    return assign({ ext: ".js"}, babel(data.toString(), options))
+    return assign({ext: ".js"}, babel(data.toString(), options))
   })
 }
