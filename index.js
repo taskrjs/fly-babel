@@ -1,11 +1,12 @@
-const babel = require("babel-core").transform
-const assign = require("object-assign")
-const readPkg = require("read-pkg-up")
+const babel = require('babel-core').transform
+const assign = require('object-assign')
+const readPkg = require('read-pkg-up')
+
 const BABEL_REGEX = /(^babel-(?:plugin|preset))-(.*)/ig
 
 module.exports = function () {
   var cache
-  return this.filter("babel", function (data, options) {
+  return this.filter('babel', function (data, options) {
     if (options.preload) {
       delete options.preload
       var pkg = cache || (cache = readPkg.sync().pkg)
@@ -16,6 +17,6 @@ module.exports = function () {
     }
     options.filename = options.file.base
     delete options.file
-    return assign({ext: ".js"}, babel(data.toString(), options))
+    return assign({ext: '.js'}, babel(data.toString(), options))
   })
 }
