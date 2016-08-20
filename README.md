@@ -50,5 +50,5 @@ export function* text () {
 [npm-pkg-link]: https://www.npmjs.org/package/fly-babel
 [npm-ver-link]: https://img.shields.io/npm/v/fly-babel.svg?style=flat-square
 [dl-badge]:     http://img.shields.io/npm/dm/fly-babel.svg?style=flat-square
-[travis-link]:  https://travis-ci.org/bucaran/fly-babel
-[travis-badge]: http://img.shields.io/travis/bucaran/fly-babel.svg?style=flat-square
+[travis-link]:  https://travis-ci.org/flyjs/fly-babel
+[travis-badge]: http://img.shields.io/travis/flyjs/fly-babel.svg?style=flat-square
