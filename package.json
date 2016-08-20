@@ -6,13 +6,7 @@
   "repository": "https://github.com/bucaran/fly-babel",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint *.js",
-    "setup": "npm i && npm test",
-    "spec": "npm run test | tspec",
-    "test": "npm run lint && npm run test-harmony",
-    "build": "echo No build task specified.",
-    "deploy": "npm run test && git push origin master && npm publish",
-    "test-harmony": "node --harmony `which tape` test/*.js | `which tspec`"
+    "test": "xo && node --harmony `which tape` test/*.js | `which tspec`"
   },
   "author": "Jorge Bucaran",
   "dependencies": {
@@ -23,12 +17,11 @@
     "source-map": "^0.4.4"
   },
   "devDependencies": {
-    "eslint": "^0.21.2",
     "tap-spec": "^4.0.2",
-    "tape": "^4.0.0"
+    "tape": "^4.0.0",
+    "xo": "^0.16.0"
   },
   "engines": {
-    "iojs": ">= 1.0.0",
     "node": ">= 0.12.0"
   },
   "keywords": [
@@ -37,10 +30,18 @@
     "babel",
     "es6",
     "compile",
+    "esnext",
     "transpile",
     "6to5",
     "harmony",
     "ES.next",
     "ecmascript"
-  ]
+  ],
+  "xo": {
+    "space": true,
+    "semicolon": false,
+    "ignore": [
+      "test/fixture/*.js"
+    ]
+  }
 }
