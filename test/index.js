@@ -19,7 +19,7 @@ test('fly-babel', function (t) {
   t.end()
 })
 
-test('fly-babel preloading should pass on unfound plugins/presets', function (t) {
+test('fly-babel preloading does nothing if plugins/presets not found', function (t) {
   t.plan(1)
   babel.call({
     filter: function (name, transform) {
@@ -32,7 +32,7 @@ test('fly-babel preloading should pass on unfound plugins/presets', function (t)
   t.end()
 })
 
-test('fly-babel preloading should properly works', function (t) {
+test('fly-babel preloading will load presets/plugins & continue transformation', function (t) {
   t.plan(3)
   process.chdir(__dirname)
   babel.call({
