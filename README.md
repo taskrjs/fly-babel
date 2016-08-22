@@ -15,6 +15,9 @@
 ## Usage
 > Check out the [documentation](https://babeljs.io/docs/usage/options/) to see the available options.
 
+`fly-babel` also alows you to preload presets / plugins defined in `package.json` by adding extra option `options.preload`.
+See below for usage example.
+
 ### Install
 
 ```a
@@ -29,6 +32,19 @@ export function* text () {
     .source("src/**/*.js")
     .babel({
       presets: ["es2015"],
+      sourceMaps: true
+    })
+    .target("dist/")
+}
+
+// with preloading
+export function* babel () {
+  yield this
+    .source("src/**/*.js")
+    .babel({
+      // will parse your package.json 
+      // and include available plugins / presets
+      preload: true,
       sourceMaps: true
     })
     .target("dist/")
