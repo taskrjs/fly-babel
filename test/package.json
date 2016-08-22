@@ -1,0 +1,10 @@
+{
+  "name": "fixture-package",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.0",
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.0",
+    "xo": "^0.16.0"
+  }
+}

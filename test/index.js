@@ -16,4 +16,34 @@ test('fly-babel', function (t) {
       t.equal(map.sourcesContent[0], content, 'turn on sourcemaps')
     }
   })
+  t.end()
+})
+
+test('fly-babel preloading should pass on unfound plugins/presets', function (t) {
+  t.plan(1)
+  babel.call({
+    filter: function (name, transform) {
+      const content = 'let a = 0'
+      const result = transform(content, {file: {}, preload: true})
+
+      t.notOk(/var a/.test(result.code), 'code not transformed')
+    }
+  })
+  t.end()
+})
+
+test('fly-babel preloading should properly works', function (t) {
+  t.plan(3)
+  process.chdir(__dirname)
+  babel.call({
+    filter: function (name, transform) {
+      const content = 'let a = 0'
+      const result = transform(content, {file: {}, preload: true})
+
+      t.equal(name, 'babel', 'babel filter')
+      t.ok(/var a/.test(result.code), 'code transformed')
+      t.equal(result.ext, '.js', 'correct extension')
+    }
+  })
+  t.end()
 })
