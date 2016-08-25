@@ -32,7 +32,7 @@ test('fly-babel preloading does nothing if plugins/presets not found', function 
   t.end()
 })
 
-test('fly-babel preloading will load presets/plugins & continue transformation', function (t) {
+test('fly-babel preloading will load presets & continue transformation', function (t) {
   t.plan(3)
   process.chdir(__dirname)
   babel.call({
@@ -46,4 +46,18 @@ test('fly-babel preloading will load presets/plugins & continue transformation',
     }
   })
   t.end()
+})
+
+test('fly-babel preloading will load plugins & continue transformation', function (t) {
+  t.plan(3)
+  babel.call({
+    filter: function (name, transform) {
+      const fixture = `var obj = {}; obj::func`
+      const result = transform(fixture, {file: {}, preload: true})
+
+      t.equal(name, 'babel', 'babel filter')
+      t.ok(/func\.bind\(obj\)/.test(result.code), 'code transformed')
+      t.equal(result.ext, '.js', 'correct extension')
+    }
+  })
 })
