@@ -1,6 +1,6 @@
-const babel = require('babel-core').transform
-const assign = require('object-assign')
-const readPkg = require('read-pkg-up')
+var babel = require('babel-core').transform
+var assign = require('object-assign')
+var readPkg = require('read-pkg-up')
 
 var BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i
 
@@ -14,9 +14,10 @@ module.exports = function () {
       var deps = Object.keys(pkg.devDependencies || {})
 
       deps.forEach(function (value) {
-        var parsed = BABEL_REGEX.exec(value)
-        if (parsed) {
-          (options[parsed[2] + 's'] || (options[parsed[2] + 's'] = [])).push(parsed[3])
+        var segs = BABEL_REGEX.exec(value)
+        if (segs) {
+          var key = (segs[2] + 's')
+          options[key] = (options[key] || []).concat(segs[3])
         }
       })
     }
