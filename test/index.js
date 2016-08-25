@@ -52,7 +52,7 @@ test('fly-babel preloading will load plugins & continue transformation', functio
   t.plan(3)
   babel.call({
     filter: function (name, transform) {
-      const fixture = `var obj = {}; obj::func`
+      const fixture = 'var obj = {}; obj::func'
       const result = transform(fixture, {file: {}, preload: true})
 
       t.equal(name, 'babel', 'babel filter')
@@ -60,4 +60,5 @@ test('fly-babel preloading will load plugins & continue transformation', functio
       t.equal(result.ext, '.js', 'correct extension')
     }
   })
+  t.end()
 })
