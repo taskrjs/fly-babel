@@ -23,19 +23,17 @@
   ],
   "dependencies": {
     "babel-core": "^6.3.0",
-    "babel-preset-es2015": "^6.3.0",
-    "object-assign": "^3.0.0",
-    "read-pkg-up": "^1.0.1",
-    "source-map": "^0.4.4"
+    "read-pkg-up": "^1.0.1"
   },
   "devDependencies": {
     "babel-plugin-transform-function-bind": "^6.8.0",
+    "babel-preset-es2015": "^6.3.0",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.0",
     "xo": "^0.16.0"
   },
   "engines": {
-    "node": ">= 0.12.0"
+    "node": ">= 4.6.0"
   },
   "keywords": [
     "fly",
@@ -49,12 +47,5 @@
     "harmony",
     "ES.next",
     "ecmascript"
-  ],
-  "xo": {
-    "space": true,
-    "semicolon": false,
-    "ignore": [
-      "test/fixture/*.js"
-    ]
-  }
+  ]
 }
