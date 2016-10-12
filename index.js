@@ -1,28 +1,46 @@
-var babel = require('babel-core').transform
-var assign = require('object-assign')
-var readPkg = require('read-pkg-up')
+'use strict';
 
-var BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i
+const babel = require('babel-core').transform;
+const readPkg = require('read-pkg-up');
+
+const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
+
+function * getPlugins() {
+  const pkg = yield readPkg().pkg;
+  return Object.keys(pkg.devDependencies || {});
+}
+
+function genConfig(deps) {
+  const out = {};
+  deps.forEach(dep => {
+    const segs = BABEL_REGEX.exec(dep);
+    if (segs) {
+      const k = `${segs[2]}s`;
+      out[k] = (out[k] || []).concat(segs[3]);
+    }
+  });
+  return out;
+}
 
 module.exports = function () {
-  var cache
-  return this.filter('babel', function (data, options) {
-    if (options.preload) {
-      delete options.preload
+  let cache;
+  let config;
 
-      var pkg = cache || (cache = readPkg.sync().pkg)
-      var deps = Object.keys(pkg.devDependencies || {})
-
-      deps.forEach(function (value) {
-        var segs = BABEL_REGEX.exec(value)
-        if (segs) {
-          var key = (segs[2] + 's')
-          options[key] = (options[key] || []).concat(segs[3])
-        }
-      })
+  this.plugin('babel', {}, function * (file, opts) {
+    if (opts.preload) {
+      delete opts.preload;
+      // get dependencies
+      cache = cache || yield getPlugins();
+      // attach any deps to babel options
+      config = config || genConfig(cache);
+      // update options
+      Object.assign(opts, config);
     }
-    options.filename = options.file.base
-    delete options.file
-    return assign({ext: '.js'}, babel(data.toString(), options))
-  })
-}
+
+    // attach file's name
+    opts.filename = file.name;
+
+    // update file's data
+    file.data = babel(file.data.toString(), opts);
+  });
+};
