@@ -1,64 +1,82 @@
-const test = require('tape').test
-const babel = require('../')
+/* eslint import/no-extraneous-dependencies: 0 */
+'use strict';
 
-test('fly-babel', function (t) {
-  t.plan(5)
-  babel.call({
-    filter: function (name, transform) {
-      const content = 'let a = 0'
-      const result = transform(content, {file: {}, presets: ['es2015']})
-      const map = transform(content, {file: {}, sourceMaps: true}).map
+const join = require('path').join;
+const test = require('tape').test;
+const Fly = require('fly');
 
-      t.equal(name, 'babel', 'add babel filter')
-      t.ok(/var a/.test(result.code), 'babel transform')
-      t.equal(result.ext, '.js', 'extension is .js')
-      t.equal(result.map, null, 'no sourcemaps by default')
-      t.equal(map.sourcesContent[0], content, 'turn on sourcemaps')
-    }
-  })
-  t.end()
-})
+const dir = join(__dirname, 'fixtures');
+const tmp = join(__dirname, '.tmp');
 
-test('fly-babel preloading does nothing if plugins/presets not found', function (t) {
-  t.plan(1)
-  babel.call({
-    filter: function (name, transform) {
-      const content = 'let a = 0'
-      const result = transform(content, {file: {}, preload: true})
+test('fly-babel', t => {
+	t.plan(15);
 
-      t.notOk(/var a/.test(result.code), 'code not transformed')
-    }
-  })
-  t.end()
-})
+	const src = `${dir}/a.js`;
+	const want = `"use strict";\n\nvar a = 0;`;
 
-test('fly-babel preloading will load presets & continue transformation', function (t) {
-  t.plan(3)
-  process.chdir(__dirname)
-  babel.call({
-    filter: function (name, transform) {
-      const content = 'let a = 0'
-      const result = transform(content, {file: {}, preload: true})
+	const fly = new Fly({
+		plugins: [{
+			func: require('../')
+		}],
+		tasks: {
+			a: function * () {
+				t.ok('babel' in fly, 'add the `babel` plugin');
 
-      t.equal(name, 'babel', 'babel filter')
-      t.ok(/var a/.test(result.code), 'code transformed')
-      t.equal(result.ext, '.js', 'correct extension')
-    }
-  })
-  t.end()
-})
+				yield this.source(src).babel({presets: ['es2015']}).target(tmp);
 
-test('fly-babel preloading will load plugins & continue transformation', function (t) {
-  t.plan(3)
-  babel.call({
-    filter: function (name, transform) {
-      const fixture = 'var obj = {}; obj::func'
-      const result = transform(fixture, {file: {}, preload: true})
+				const arr = yield this.$.expand(`${tmp}/*`);
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.ok(str.length, 'via `presets`: write new file');
+				t.equal(arr.length, 1, 'via `presets`: exclude sourcemaps by default');
+				t.equal(str, want, 'via `presets`: transpile to es5 code');
 
-      t.equal(name, 'babel', 'babel filter')
-      t.ok(/func\.bind\(obj\)/.test(result.code), 'code transformed')
-      t.equal(result.ext, '.js', 'correct extension')
-    }
-  })
-  t.end()
-})
+				yield this.clear(tmp);
+			},
+			b: function * () {
+				yield this.source(src).babel({preload: true}).target(tmp);
+
+				const arr = yield this.$.expand(`${tmp}/*`);
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.equal(arr.length, 1, 'via `preload`: exclude sourcemaps by default');
+				t.equal(str, want, 'via `preload`: transpile to es5 code');
+
+				yield this.clear(tmp);
+			},
+			c: function * () {
+				yield this.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: true}).target(tmp);
+
+				const arr = yield this.$.expand(`${tmp}/*`);
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.equal(arr.length, 2, 'via `sourceMaps: true`; create file & external sourcemap');
+				t.true(/var a/.test(str), 'via `sourceMaps: true`; transpile to es5 code');
+				t.true(/sourceMappingURL/.test(str), 'via `sourceMaps: true`; append `sourceMappingURL` link');
+
+				yield this.clear(tmp);
+			},
+			d: function * () {
+				yield this.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: 'inline'}).target(tmp);
+
+				const arr = yield this.$.expand(`${tmp}/*`);
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.ok(/var a/.test(str), 'via `sourceMaps: "inline"`; transpile to es5 code');
+				t.equal(arr.length, 1, 'via `sourceMaps: "inline"`; do not create external sourcemap file');
+				t.ok(/sourceMappingURL/.test(str), 'via `sourceMaps: "inline"`; embed `sourceMappingURL` content');
+
+				yield this.clear(tmp);
+			},
+			e: function * () {
+				yield this.source(`${dir}/*.js`).babel({presets: ['es2015'], sourceMaps: 'both'}).target(tmp);
+
+				const arr = yield this.$.expand(`${tmp}/*`);
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.ok(/var a/.test(str), 'via `sourceMaps: "both"`; transpile to es5 code');
+				t.equal(arr.length, 2, 'via `sourceMaps: "both"`; create external sourcemap file');
+				t.ok(/sourceMappingURL/.test(str), 'via `sourceMaps: "both"`; embed `sourceMappingURL` content');
+
+				yield this.clear(tmp);
+			}
+		}
+	});
+
+	fly.serial(['a', 'b', 'c', 'd', 'e']);
+});
