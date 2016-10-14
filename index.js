@@ -38,9 +38,27 @@ module.exports = function () {
 		}
 
 		// attach file's name
-		opts.filename = file.name;
+		opts.filename = file.base;
+
+		const output = babel(file.data, opts);
+
+		if (output.map) {
+			const map = `${file.base}.map`;
+
+			// append `sourceMappingURL` to original file
+			if (opts.sourceMaps !== 'both') {
+				output.code += new Buffer(`\n//# sourceMappingURL=${map}`);
+			}
+
+			// add sourcemap to `files` array
+			this._.files.push({
+				base: map,
+				dir: file.dir,
+				data: new Buffer(JSON.stringify(output.map))
+			});
+		}
 
 		// update file's data
-		file.data = babel(file.data.toString(), opts);
+		file.data = new Buffer(output.code);
 	});
 };
