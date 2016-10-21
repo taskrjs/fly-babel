@@ -5,6 +5,9 @@
   "license": "MIT",
   "repository": "https://github.com/bucaran/fly-babel",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "xo && tape test/*.js | tap-spec"
   },
@@ -23,6 +26,7 @@
   ],
   "dependencies": {
     "babel-core": "^6.3.0",
+    "flatten": "^1.0.2",
     "read-pkg-up": "^1.0.1"
   },
   "devDependencies": {
