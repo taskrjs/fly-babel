@@ -1,70 +1,99 @@
 <div align="center">
-  <a href="http://github.com/flyjs/fly">
-    <img width=200px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
-  </a>
+	<a href="http://github.com/flyjs/fly">
+		<img width=200px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+	</a>
 </div>
 
-> [Babel](babeljs.io) plugin for _[Fly][fly]_.
+# fly-babel [![][travis-badge]][travis-link]
 
-[![][fly-badge]][fly]
-[![npm package][npm-ver-link]][releases]
-[![][dl-badge]][npm-pkg-link]
-[![][travis-badge]][travis-link]
-[![][mit-badge]][mit]
+> [Babel](http://babeljs.io) plugin for Fly.
+
+## Install
+
+```
+npm install --save-dev fly-babel
+```
+
+## API
+
+### .babel(options)
+
+All Babel options can be found [here](http://babeljs.io/docs/usage/options/). 
+
+> **Note:** For most cases, you only to think about `presets`, `plugins`, `sourceMaps`, `minified`, `comments`, and/or `babelrc`.
+
+#### options.preload
+
+Type: `boolean`<br>
+Default: `false`
+
+Automatically loads all babel-related plugins & presets from `package.json`. Will also auto-configure Babel to use these packages. See the [example](#preloading) for more.
 
 ## Usage
-> Check out the [documentation](https://babeljs.io/docs/usage/options/) to see the available options.
 
-`fly-babel` also alows you to preload presets / plugins defined in `package.json` by adding extra option `options.preload`.
-See below for usage example.
-
-### Install
-
-```a
-npm install -D fly-babel
-```
-
-### Example
+#### Basic
 
 ```js
-export function* text () {
-  yield this
-    .source("src/**/*.js")
-    .babel({
-      presets: ["es2015"],
-      sourceMaps: true
-    })
-    .target("dist/")
-}
-
-// with preloading
-export function* babel () {
-  yield this
-    .source("src/**/*.js")
-    .babel({
-      // will parse your package.json 
-      // and include available plugins / presets
-      preload: true,
-      sourceMaps: true
-    })
-    .target("dist/")
+exports.default = function * () {
+	yield this.source('src/**/*.js')
+		.babel({
+			presets: ['es2015']
+		})
+		.target('dist/js')
 }
 ```
 
-# License
+#### Source Maps
 
-[MIT][mit] © [Jorge Bucaran][author] et [al][contributors]
+You can create source maps for each file. 
 
+Passing `true` will create an _external_ `.map` file. You may also use `'inline'` or `'both'`. Please see the [Babel options](http://babeljs.io/docs/usage/options/) for more information.
 
-[mit]:          http://opensource.org/licenses/MIT
-[author]:       http://about.bucaran.me
-[contributors]: https://github.com/bucaran/fly-babel/graphs/contributors
-[releases]:     https://github.com/bucaran/fly-babel/releases
-[fly]:          https://www.github.com/flyjs/fly
-[fly-badge]:    https://img.shields.io/badge/fly-JS-05B3E1.svg?style=flat-square
-[mit-badge]:    https://img.shields.io/badge/license-MIT-444444.svg?style=flat-square
-[npm-pkg-link]: https://www.npmjs.org/package/fly-babel
-[npm-ver-link]: https://img.shields.io/npm/v/fly-babel.svg?style=flat-square
-[dl-badge]:     http://img.shields.io/npm/dm/fly-babel.svg?style=flat-square
+```js
+exports.default = function * () {
+	yield this.source('src/**/*.js')
+		.babel({
+			presets: ['es2015'],
+			sourceMaps: true //=> external; also 'inline' or 'both'
+		})
+		.target('dist/js')
+}
+```
+
+#### Preloading
+
+For the especially lazy, you may "preload" all babel-related presets **and** plugins defined within your `package.json`. This spares you the need to define your `presets` and `plugins` values manually.
+
+> **Note:** If you require a [complex configuration](http://babeljs.io/docs/plugins/#pluginpresets-options), you need to define that manually. While other plugins & presets will continue to "preload", your manual definitions will not be lost.
+
+```js
+exports.default = function * () {
+	yield this.source('src/**/*.js')
+		.babel({
+			preload: true,
+			plugins: [
+				// complex plugin definition:
+				['transform-async-to-module-method', {
+					'module': 'bluebird',
+					'method': 'coroutine'
+				}]
+			]
+		})
+		.target('dist');
+	//=> after preloading:
+	//=>   {
+	//=>     presets: ['es2015'],
+	//=>     plugins: [
+	//=>       'transform-class-properties',
+	//=>       ['transform-async-to-module-method', {...}]
+	//=>     ]
+	//=>   }
+}
+```
+
+## License
+
+MIT © [FlyJS](https://www.github.com/flyjs/fly)
+
 [travis-link]:  https://travis-ci.org/flyjs/fly-babel
 [travis-badge]: http://img.shields.io/travis/flyjs/fly-babel.svg?style=flat-square
