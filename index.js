@@ -5,19 +5,20 @@ const readPkg = require('read-pkg-up');
 
 const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
 
-function getPlugins() {
+function getBabels() {
 	const pkg = readPkg.sync().pkg;
-	return Object.keys(pkg.devDependencies || {});
+	return ['devDependencies', 'dependencies']
+			.map(s => Object.keys(pkg[s] || {}))
+			.reduce((a, b) => a.concat(b))
+			.filter(s => BABEL_REGEX.test(s));
 }
 
 function genConfig(deps) {
 	const out = {};
 	deps.forEach(dep => {
 		const segs = BABEL_REGEX.exec(dep);
-		if (segs) {
-			const k = `${segs[2]}s`;
-			out[k] = (out[k] || []).concat(segs[3]);
-		}
+		const k = `${segs[2]}s`;
+		out[k] = (out[k] || []).concat(segs[3]);
 	});
 	return out;
 }
@@ -30,7 +31,8 @@ module.exports = function () {
 		if (opts.preload) {
 			delete opts.preload;
 			// get dependencies
-			cache = cache || getPlugins();
+			cache = cache || getBabels();
+			console.log('this is cache: ', cache);
 			// attach any deps to babel options
 			config = config || genConfig(cache);
 			// update options
