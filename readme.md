@@ -1,7 +1,7 @@
 <div align="center">
-	<a href="http://github.com/flyjs/fly">
-		<img width=200px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
-	</a>
+  <a href="http://github.com/flyjs/fly">
+    <img width=200px  src="https://cloud.githubusercontent.com/assets/8317250/8733685/0be81080-2c40-11e5-98d2-c634f076ccd7.png">
+  </a>
 </div>
 
 # fly-babel [![][travis-badge]][travis-link]
@@ -35,11 +35,11 @@ Automatically loads all babel-related plugins & presets from `package.json`. Wil
 
 ```js
 exports.default = function * () {
-	yield this.source('src/**/*.js')
-		.babel({
-			presets: ['es2015']
-		})
-		.target('dist/js')
+  yield this.source('src/**/*.js')
+    .babel({
+      presets: ['es2015']
+    })
+    .target('dist/js')
 }
 ```
 
@@ -51,12 +51,12 @@ Passing `true` will create an _external_ `.map` file. You may also use `'inline'
 
 ```js
 exports.default = function * () {
-	yield this.source('src/**/*.js')
-		.babel({
-			presets: ['es2015'],
-			sourceMaps: true //=> external; also 'inline' or 'both'
-		})
-		.target('dist/js')
+  yield this.source('src/**/*.js')
+    .babel({
+      presets: ['es2015'],
+      sourceMaps: true //=> external; also 'inline' or 'both'
+    })
+    .target('dist/js')
 }
 ```
 
@@ -68,26 +68,26 @@ For the especially lazy, you may "preload" all babel-related presets **and** plu
 
 ```js
 exports.default = function * () {
-	yield this.source('src/**/*.js')
-		.babel({
-			preload: true,
-			plugins: [
-				// complex plugin definition:
-				['transform-async-to-module-method', {
-					'module': 'bluebird',
-					'method': 'coroutine'
-				}]
-			]
-		})
-		.target('dist');
-	//=> after preloading:
-	//=>   {
-	//=>     presets: ['es2015'],
-	//=>     plugins: [
-	//=>       'transform-class-properties',
-	//=>       ['transform-async-to-module-method', {...}]
-	//=>     ]
-	//=>   }
+  yield this.source('src/**/*.js')
+    .babel({
+      preload: true,
+      plugins: [
+        // complex plugin definition:
+        ['transform-async-to-module-method', {
+          'module': 'bluebird',
+          'method': 'coroutine'
+        }]
+      ]
+    })
+    .target('dist');
+  //=> after preloading:
+  //=>   {
+  //=>     presets: ['es2015'],
+  //=>     plugins: [
+  //=>       'transform-class-properties',
+  //=>       ['transform-async-to-module-method', {...}]
+  //=>     ]
+  //=>   }
 }
 ```
 
