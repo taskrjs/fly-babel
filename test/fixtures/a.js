@@ -1,1 +1,1 @@
-let a = 0
+export let a = 0

@@ -9,10 +9,10 @@ const dir = join(__dirname, 'fixtures');
 const tmp = join(__dirname, '.tmp');
 
 test('fly-babel', t => {
-	t.plan(15);
+	t.plan(16);
 
 	const src = `${dir}/a.js`;
-	const want = `"use strict";\n\nvar a = 0;`;
+	const want = '"use strict";\n\nObject.defineProperty(exports, "__esModule"';
 
 	const fly = new Fly({
 		plugins: [{
@@ -28,7 +28,7 @@ test('fly-babel', t => {
 				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
 				t.ok(str.length, 'via `presets`: write new file');
 				t.equal(arr.length, 1, 'via `presets`: exclude sourcemaps by default');
-				t.equal(str, want, 'via `presets`: transpile to es5 code');
+				t.true(str.includes(want), 'via `presets`: transpile to es5 code');
 
 				yield this.clear(tmp);
 			},
@@ -38,7 +38,7 @@ test('fly-babel', t => {
 				const arr = yield this.$.expand(`${tmp}/*`);
 				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
 				t.equal(arr.length, 1, 'via `preload`: exclude sourcemaps by default');
-				t.equal(str, want, 'via `preload`: transpile to es5 code');
+				t.true(str.includes(want), 'via `preload`: transpile to es5 code');
 
 				yield this.clear(tmp);
 			},
@@ -74,9 +74,20 @@ test('fly-babel', t => {
 				t.ok(/sourceMappingURL/.test(str), 'via `sourceMaps: "both"`; embed `sourceMappingURL` content');
 
 				yield this.clear(tmp);
+			},
+			f: function * () {
+				yield this.source(`${dir}/*.js`).babel({
+					preload: true,
+					presets: [['es2015', {modules: 'systemjs'}]]
+				}).target(tmp);
+
+				const str = yield this.$.read(`${tmp}/a.js`, 'utf8');
+				t.true(str.includes('System.register'), 'via `preload` + `presets`; keep detailed `presets` entry');
+
+				yield this.clear(tmp);
 			}
 		}
 	});
 
-	fly.serial(['a', 'b', 'c', 'd', 'e']);
+	fly.serial(['a', 'b', 'c', 'd', 'e', 'f']);
 });
