@@ -1,22 +1,22 @@
 'use strict';
 
-const babel = require('babel-core').transform;
+const {transform} = require('babel-core');
 const readPkg = require('read-pkg-up');
 const flatten = require('flatten');
 
 const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
 
 function getBabels() {
-	const pkg = readPkg.sync().pkg;
+	const {pkg} = readPkg.sync();
 	return flatten(
 		['devDependencies', 'dependencies'].map(s => Object.keys(pkg[s] || {}))
 	).filter(s => BABEL_REGEX.test(s));
 }
 
-module.exports = function () {
+module.exports = function (fly) {
 	let cache;
 
-	this.plugin('babel', {}, function * (file, opts) {
+	fly.plugin('babel', {}, function * (file, opts) {
 		if (opts.preload) {
 			delete opts.preload;
 			// get dependencies
@@ -40,7 +40,7 @@ module.exports = function () {
 		// attach file's name
 		opts.filename = file.base;
 
-		const output = babel(file.data, opts);
+		const output = transform(file.data, opts);
 
 		if (output.map) {
 			const map = `${file.base}.map`;
