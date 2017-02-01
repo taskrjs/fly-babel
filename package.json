@@ -31,7 +31,8 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.3.0",
-    "fly": "beta",
+    "fly": "^2.0.0",
+    "fly-clear": "^1.0.0",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.0",
     "xo": "^0.16.0"
