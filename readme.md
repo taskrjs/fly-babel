@@ -34,8 +34,8 @@ Automatically loads all babel-related plugins & presets from `package.json`. Wil
 #### Basic
 
 ```js
-exports.default = function * () {
-  yield this.source('src/**/*.js')
+exports.scripts = function * (fly) {
+  yield fly.source('src/**/*.js')
     .babel({
       presets: ['es2015']
     })
@@ -50,8 +50,8 @@ You can create source maps for each file.
 Passing `true` will create an _external_ `.map` file. You may also use `'inline'` or `'both'`. Please see the [Babel options](http://babeljs.io/docs/usage/options/) for more information.
 
 ```js
-exports.default = function * () {
-  yield this.source('src/**/*.js')
+exports.scripts = function * (fly) {
+  yield fly.source('src/**/*.js')
     .babel({
       presets: ['es2015'],
       sourceMaps: true //=> external; also 'inline' or 'both'
@@ -67,8 +67,8 @@ For the especially lazy, you may "preload" all babel-related presets **and** plu
 > **Note:** If you require a [complex configuration](http://babeljs.io/docs/plugins/#pluginpresets-options), you need to define that manually. While other plugins & presets will continue to "preload", your manual definitions will not be lost.
 
 ```js
-exports.default = function * () {
-  yield this.source('src/**/*.js')
+exports.scripts = function * (fly) {
+  yield fly.source('src/**/*.js')
     .babel({
       preload: true,
       plugins: [
