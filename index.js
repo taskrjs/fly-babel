@@ -1,13 +1,13 @@
 'use strict';
 
-const {transform} = require('babel-core');
+const transform = require('babel-core').transform;
 const readPkg = require('read-pkg-up');
 const flatten = require('flatten');
 
 const BABEL_REGEX = /(^babel-)(preset|plugin)-(.*)/i;
 
 function getBabels() {
-	const {pkg} = readPkg.sync();
+	const pkg = readPkg.sync().pkg;
 	return flatten(
 		['devDependencies', 'dependencies'].map(s => Object.keys(pkg[s] || {}))
 	).filter(s => BABEL_REGEX.test(s));
